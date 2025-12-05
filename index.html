@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ENGRAMM // ДОСТУП К СИСТЕМЕ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Share Tech Mono', monospace;
+        background-color: #050505;
+        color: #fcee0a;
+        overflow: hidden; /* Prevent global scrolling for OS feel */
+      }
+      
+      /* Cyberpunk Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #111;
+        border-left: 1px solid #333;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #fcee0a;
+        border: 1px solid #000;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #b5aa04;
+      }
+
+      /* CRT Scanline Effect */
+      .scanlines {
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0),
+          rgba(255,255,255,0) 50%,
+          rgba(0,0,0,0.2) 50%,
+          rgba(0,0,0,0.2)
+        );
+        background-size: 100% 4px;
+        position: fixed;
+        pointer-events: none;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 50;
+        opacity: 0.6;
+      }
+
+      .glitch-wrapper {
+        position: relative;
+      }
+
+      @keyframes pulse-glow {
+        0%, 100% { text-shadow: 0 0 5px #fcee0a, 0 0 10px #fcee0a; }
+        50% { text-shadow: 0 0 2px #fcee0a, 0 0 5px #fcee0a; }
+      }
+      
+      .neon-text {
+        animation: pulse-glow 2s infinite;
+      }
+      
+      /* Angled Corners */
+      .clip-corner {
+        clip-path: polygon(
+          0 0,
+          100% 0,
+          100% calc(100% - 20px),
+          calc(100% - 20px) 100%,
+          0 100%
+        );
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "d3": "https://aistudiocdn.com/d3@^7.9.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <div class="scanlines"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
