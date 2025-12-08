@@ -24,7 +24,8 @@ import {
   Star,
   ChevronDown,
   GlobeLock,
-  Radio
+  Radio,
+  Mail
 } from 'lucide-react';
 import GlitchText from './components/GlitchText';
 import MemoryGraph from './components/MemoryGraph';
@@ -208,25 +209,54 @@ const INITIAL_REVIEWS: Review[] = [
 const ReviewSection: React.FC = () => {
   const [reviews, setReviews] = useState<Review[]>(INITIAL_REVIEWS);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
   const [rating, setRating] = useState(5);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !msg.trim()) return;
+    if (!name.trim() || !msg.trim() || !email.trim()) return;
 
-    const newReview: Review = {
-      id: Date.now().toString(),
-      user: name,
-      text: msg,
-      rating: rating,
-      date: new Date().toISOString().split('T')[0]
-    };
+    setIsSubmitting(true);
 
-    setReviews([newReview, ...reviews]);
-    setName('');
-    setMsg('');
-    alert('ПАКЕТ ДАННЫХ ОТПРАВЛЕН В СЕТЬ.');
+    try {
+      const response = await fetch("https://formspree.io/f/xdkqlevw", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          message: msg,
+          alias: name,
+          rating: rating,
+          _subject: `Darknet BBS Message from: ${name}`
+        })
+      });
+
+      if (response.ok) {
+        const newReview: Review = {
+          id: Date.now().toString(),
+          user: name,
+          text: msg,
+          rating: rating,
+          date: new Date().toISOString().split('T')[0]
+        };
+
+        setReviews([newReview, ...reviews]);
+        setName('');
+        setEmail('');
+        setMsg('');
+        alert('ПАКЕТ ДАННЫХ УСПЕШНО ЗАГРУЖЕН НА СЕРВЕР.');
+      } else {
+        alert('ОШИБКА ШИФРОВАНИЯ. ПОВТОРИТЕ ПОПЫТКУ.');
+      }
+    } catch (err) {
+      alert('СБОЙ СЕТЕВОГО ПРОТОКОЛА.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -294,20 +324,35 @@ const ReviewSection: React.FC = () => {
              </div>
              
              <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
-                <div className="relative group/input">
-                   <label className="block text-[10px] uppercase text-red-300 mb-2 tracking-widest group-focus-within/input:text-white transition-colors font-bold shadow-black drop-shadow-sm">ПСЕВДОНИМ (NETRUNNER ALIAS)</label>
-                   <input 
-                     type="text" 
-                     value={name}
-                     onChange={e => setName(e.target.value)}
-                     className="w-full bg-black/40 border-b border-red-500/50 focus:border-red-400 focus:outline-none py-3 text-white placeholder-red-400/50 transition-all font-light tracking-wide shadow-inner text-lg"
-                     placeholder="> ВВЕДИТЕ ИМЯ..."
-                   />
+                <div className="flex flex-col md:flex-row gap-6">
+                    <div className="relative group/input flex-1">
+                       <label className="block text-[10px] uppercase text-red-300 mb-2 tracking-widest group-focus-within/input:text-white transition-colors font-bold shadow-black drop-shadow-sm">ПСЕВДОНИМ (ALIAS)</label>
+                       <input 
+                         type="text" 
+                         value={name}
+                         onChange={e => setName(e.target.value)}
+                         className="w-full bg-black/40 border-b border-red-500/50 focus:border-red-400 focus:outline-none py-3 text-white placeholder-red-400/50 transition-all font-light tracking-wide shadow-inner text-lg"
+                         placeholder="> ВВЕДИТЕ ИМЯ..."
+                       />
+                    </div>
+                    <div className="relative group/input flex-1">
+                       <label className="block text-[10px] uppercase text-red-300 mb-2 tracking-widest group-focus-within/input:text-white transition-colors font-bold shadow-black drop-shadow-sm">EMAIL (SECURE)</label>
+                       <input 
+                         type="email" 
+                         value={email}
+                         name="email"
+                         onChange={e => setEmail(e.target.value)}
+                         className="w-full bg-black/40 border-b border-red-500/50 focus:border-red-400 focus:outline-none py-3 text-white placeholder-red-400/50 transition-all font-light tracking-wide shadow-inner text-lg"
+                         placeholder="> EMAIL@NET.COM"
+                       />
+                    </div>
                 </div>
+
                 <div className="relative group/input">
                    <label className="block text-[10px] uppercase text-red-300 mb-2 tracking-widest group-focus-within/input:text-white transition-colors font-bold shadow-black drop-shadow-sm">СООБЩЕНИЕ</label>
                    <textarea 
                      value={msg}
+                     name="message"
                      onChange={e => setMsg(e.target.value)}
                      className="w-full bg-black/40 border-b border-red-500/50 focus:border-red-400 focus:outline-none py-3 text-white placeholder-red-400/50 h-32 resize-none transition-all font-light leading-relaxed tracking-wide shadow-inner text-sm md:text-base"
                      placeholder="> ВВОД ДАННЫХ..."
@@ -328,10 +373,23 @@ const ReviewSection: React.FC = () => {
                      ))}
                    </div>
                 </div>
-                <button type="submit" className="w-full bg-red-950/60 border border-red-500/50 text-red-100 py-4 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center gap-3 font-bold uppercase tracking-[0.2em] text-sm mt-4 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] group/btn relative overflow-hidden">
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className={`w-full bg-red-950/60 border border-red-500/50 text-red-100 py-4 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center gap-3 font-bold uppercase tracking-[0.2em] text-sm mt-4 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)] group/btn relative overflow-hidden ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-red-500/20 to-transparent translate-x-[-100%] group-hover/btn:translate-x-[100%] transition-transform duration-700"></div>
-                  <Send size={16} className="group-hover/btn:translate-x-1 transition-transform relative z-10" />
-                  <span className="relative z-10">ШИФРОВАТЬ И ОТПРАВИТЬ</span>
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                      <span className="relative z-10">ШИФРОВАНИЕ...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send size={16} className="group-hover/btn:translate-x-1 transition-transform relative z-10" />
+                      <span className="relative z-10">ШИФРОВАТЬ И ОТПРАВИТЬ</span>
+                    </>
+                  )}
                 </button>
              </form>
           </div>
