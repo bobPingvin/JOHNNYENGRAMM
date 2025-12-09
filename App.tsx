@@ -562,7 +562,7 @@ ${FULL_BIOGRAPHY}
     
     // Inject Warning Log
     setLogs(prev => [
-      { id: Date.now().toString(), timestamp: new Date().toLocaleTimeString(), level: 'WARN', message: 'INITIATING CORE DUMP PROTOCOL...' },
+      { id: Date.now().toString(), timestamp: new Date().toLocaleTimeString(), level: 'WARN' as const, message: 'INITIATING CORE DUMP PROTOCOL...' },
       ...prev
     ]);
 
@@ -575,7 +575,7 @@ ${FULL_BIOGRAPHY}
           const hex = Math.random().toString(16).substring(2, 10).toUpperCase();
           const segment = Math.floor(Math.random() * 9999);
           setLogs(prevLogs => [
-             { id: Date.now().toString(), timestamp: new Date().toLocaleTimeString(), level: 'SYS', message: `UPLOADING SEGMENT [${segment}]: 0x${hex}...` },
+             { id: Date.now().toString(), timestamp: new Date().toLocaleTimeString(), level: 'SYS' as const, message: `UPLOADING SEGMENT [${segment}]: 0x${hex}...` },
              ...prevLogs
           ].slice(0, 35));
         }
@@ -585,7 +585,7 @@ ${FULL_BIOGRAPHY}
            setIsBackingUp(false);
            downloadBackup(); 
            setLogs(prevLogs => [
-             { id: Date.now().toString(), timestamp: new Date().toLocaleTimeString(), level: 'INFO', message: 'BACKUP COMPLETE. DATA SAVED TO EXTERNAL STORAGE.' },
+             { id: Date.now().toString(), timestamp: new Date().toLocaleTimeString(), level: 'INFO' as const, message: 'BACKUP COMPLETE. DATA SAVED TO EXTERNAL STORAGE.' },
              ...prevLogs
            ]);
            return 0;
