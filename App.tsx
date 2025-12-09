@@ -31,6 +31,7 @@ import GlitchText from './components/GlitchText';
 import MemoryGraph from './components/MemoryGraph';
 import Simulacrum from './components/Simulacrum';
 import Blackwall from './components/Blackwall';
+import CustomCursor from './components/CustomCursor';
 import { ViewState, MemoryNode, MemoryLink, SystemLog } from './types';
 
 // Extended Data - Johnny Silverhand Biography
@@ -599,6 +600,7 @@ ${FULL_BIOGRAPHY}
   if (view === ViewState.BOOT) {
     return (
       <div className="h-screen w-screen bg-black flex flex-col items-center justify-center text-yellow-400 font-mono relative overflow-hidden">
+        <CustomCursor />
         <div className="text-4xl font-bold mb-8 animate-pulse">
           <GlitchText text="ENGRAMM" />
         </div>
@@ -620,6 +622,7 @@ ${FULL_BIOGRAPHY}
 
   return (
     <div className="min-h-screen bg-neutral-950 text-yellow-400 font-mono flex flex-col relative selection:bg-yellow-400 selection:text-black h-screen overflow-hidden">
+      <CustomCursor />
       
       {/* APP WINDOW */}
       <div className="h-full flex flex-col relative">

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
   <head>
@@ -12,6 +13,12 @@
         background-color: #050505;
         color: #fcee0a;
         overflow: hidden; /* Prevent global scrolling for OS feel */
+        cursor: none; /* Hide default cursor */
+      }
+      
+      /* Hide cursor on all interactive elements */
+      a, button, input, textarea, select, label {
+        cursor: none !important;
       }
       
       /* Cyberpunk Scrollbar */

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as d3 from 'd3';
 import { MemoryNode, MemoryLink, GraphNode, GraphLink } from '../types';
@@ -151,8 +152,15 @@ const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes, links }) => {
     
     const zoom = d3.zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.2, 5])
+      .on("start", () => {
+         // Apply grabbing class to SVG container for custom cursor detection
+         d3.select(svgRef.current).classed("grabbing", true);
+      })
       .on("zoom", (event) => {
         g.attr("transform", event.transform);
+      })
+      .on("end", () => {
+         d3.select(svgRef.current).classed("grabbing", false);
       });
     
     svg.call(zoom)
@@ -199,7 +207,7 @@ const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes, links }) => {
       .data(graphNodes)
       .join("g")
       .attr("class", "node")
-      .attr("cursor", "pointer")
+      .attr("cursor", "none") // Ensure default cursor is none so CustomCursor takes over
       .style("will-change", "transform") // Optimization for smoother movement
       .call(d3.drag<SVGGElement, GraphNode>()
         .on("start", dragstarted)
@@ -434,10 +442,14 @@ const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes, links }) => {
       d.fx = d.x;
       d.fy = d.y;
       
-      // Ensure the dragged node is fully opaque and others maintain their state (or dim them)
-      // For now, we lock the current state.
-      // Alternatively, force "active" state:
-      d3.select(event.sourceEvent.target).style("cursor", "grabbing");
+      // Add grabbing class for Custom Cursor detection
+      const target = event.sourceEvent.target as Element;
+      d3.select(target).classed("grabbing", true);
+      
+      const nodeEl = target.closest(".node");
+      if (nodeEl) {
+        d3.select(nodeEl).classed("grabbing", true);
+      }
     }
 
     function dragged(event: any, d: GraphNode) {
@@ -450,20 +462,21 @@ const MemoryGraph: React.FC<MemoryGraphProps> = ({ nodes, links }) => {
       if (!event.active) simulation.alphaTarget(0);
       d.fx = null;
       d.fy = null;
-      d3.select(event.sourceEvent.target).style("cursor", "pointer");
       
+      // Remove grabbing class
+      const target = event.sourceEvent.target as Element;
+      d3.select(target).classed("grabbing", false);
+      
+      const nodeEl = target.closest(".node");
+      if (nodeEl) {
+        d3.select(nodeEl).classed("grabbing", false);
+        d3.select(nodeEl).classed("node-hovered", false);
+      }
+
       // Reset visuals manually to ensure clean state after drag
       node.style("opacity", 1);
       linkBase.style("opacity", 1);
       linkFlow.style("opacity", 0.6).attr("stroke-width", 3);
-      
-      // Ensure hover class is removed
-      // d3 selection doesn't have .closest()
-      const targetElement = event.sourceEvent.target as Element;
-      const nodeElement = targetElement.closest ? targetElement.closest(".node") : null;
-      if (nodeElement) {
-        d3.select(nodeElement).classed("node-hovered", false);
-      }
     }
 
   }, [nodes, links]);
