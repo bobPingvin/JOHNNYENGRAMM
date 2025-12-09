@@ -135,25 +135,27 @@ const CustomCursor: React.FC = () => {
          />
       ))}
 
-      {/* Click Ripple */}
+      {/* Click Ripple - Fixed Centering */}
       {clickRipple && (
         <div 
            key={clickRipple.id}
-           className="fixed pointer-events-none z-[9997] border border-red-500 rounded-full animate-ping opacity-75"
+           className="fixed pointer-events-none z-[9997]"
            style={{
              left: clickRipple.x,
              top: clickRipple.y,
              width: '40px',
              height: '40px',
-             transform: 'translate(-50%, -50%)'
+             transform: 'translate(-50%, -50%)' // Centers the wrapper
            }}
-        />
+        >
+          <div className="w-full h-full border border-red-500 rounded-full animate-ping opacity-75"></div>
+        </div>
       )}
 
       {/* Main Cursor (Center Dot / Cross) */}
       <div 
         ref={cursorRef}
-        className={`fixed top-0 left-0 pointer-events-none z-[10000] transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+        className={`fixed top-0 left-0 pointer-events-none z-[10000] transition-opacity duration-300 select-none ${isVisible ? 'opacity-100' : 'opacity-0'}`}
         style={{ willChange: 'transform' }}
       >
         <div className={`
@@ -175,7 +177,7 @@ const CustomCursor: React.FC = () => {
         {/* Coordinate Text */}
         <div 
           ref={textRef}
-          className={`absolute top-4 left-4 text-[8px] font-mono tracking-widest pointer-events-none whitespace-nowrap
+          className={`absolute top-4 left-4 text-[8px] font-mono tracking-widest pointer-events-none whitespace-nowrap select-none
             ${isHovering ? 'text-red-500 drop-shadow-[0_0_2px_red]' : 'text-yellow-500/50'}
           `}
         >
