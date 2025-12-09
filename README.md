@@ -27,7 +27,7 @@
 
 ### Онлайн-доступ
 
-Просто перейдите по ссылке: [**johnnyengramm-xsak.vercel.app**](https://johnnyengramm-xsak.vercel.app/) или [**vermillion-heliotrope-104a95.netlify.app**](https://app.netlify.com/projects/vermillion-heliotrope-104a95/configuration/env#GEMINI_API_KEY)
+Просто перейдите по ссылке: [**johnnyengramm-xsak.vercel.app**](https://johnnyengramm-xsak.vercel.app/) или [**vermillion-heliotrope-104a95.netlify.app**](https://vermillion-heliotrope-104a95.netlify.app/)
 
 ### Локальная установка
 
