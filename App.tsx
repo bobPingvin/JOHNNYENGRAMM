@@ -977,7 +977,7 @@ ${FULL_BIOGRAPHY}
                       <div className="flex-1 flex flex-col md:flex-row overflow-y-auto md:overflow-hidden">
                         <div className="w-full md:w-1/3 bg-black/30 p-6 border-b md:border-b-0 md:border-r border-red-900/50 flex flex-col items-center shrink-0">
                             {/* ENHANCED PHOTO FRAME */}
-                            <div className="w-48 md:w-full aspect-square bg-neutral-800 border-4 border-white/90 mb-4 flex items-center justify-center relative shadow-[0_4px_10px_rgba(0,0,0,0.5)] rotate-1 group overflow-hidden">
+                            <div className="w-48 md:w-full aspect-square bg-neutral-800 border-4 border-white/90 mb-4 flex items-center justify-center relative shadow-[0_4px_10px_rgba(0,0,0,0.5)] rotate-1 group overflow-visible">
                               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-4 bg-neutral-400/50 backdrop-blur-sm rotate-1 z-20"></div> {/* Tape */}
                               <img 
                                 src="/images/photo1.jpg" 
